@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 //Första-sidan som är stateful för att kunna ändra state under körning
 class HomePage extends StatefulWidget {
   @override
@@ -34,8 +35,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //Temporär statiskt test-lista som skapas en gång när appen startar  
-  List<Todo> tasks = List<Todo>();  
+  //Temporär statiskt test-lista som skapas en gång när appen startar
+  List<Todo> tasks = List<Todo>();
   //Lägger till lite testobjekt i listan
   @override
   void initState() {
@@ -48,24 +49,27 @@ class _HomePageState extends State<HomePage> {
     tasks.add(Todo(title: "task 7"));
     super.initState();
   }
+
   //Widget för att bygga första-sidan och appBaren
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("TIG169 TODO"), 
-        centerTitle: true,
-        actions: <Widget>[
-          _popUpButton() //Kallar på widgeten som skapar meny-knappen i appBaren
-          ]
-      ),
-      body: buildBody(), //Kallar på widgeten buildBody för att skapa innehållet i body
-      floatingActionButton: FloatingActionButton( //skapar knapp för ta sig till addTask-sidan
+          title: Text("TIG169 TODO"),
+          centerTitle: true,
+          actions: <Widget>[
+            _popUpButton() //Kallar på widgeten som skapar meny-knappen i appBaren
+          ]),
+      body:
+          buildBody(), //Kallar på widgeten buildBody för att skapa innehållet i body
+      floatingActionButton: FloatingActionButton(
+        //skapar knapp för ta sig till addTask-sidan
         child: Icon(Icons.add),
         onPressed: () => navigateAddTask(),
       ),
     );
   }
+
   //Widgeten som skapar menyn och använder sig av listan Choices för sitt innehåll som nu är funktionslöst
   Widget _popUpButton() {
     return PopupMenuButton<String>(
@@ -83,11 +87,12 @@ class _HomePageState extends State<HomePage> {
 
   //Widget som bygger listan som visas i bodyn
   Widget buildBody() {
-    return ListView.builder(      
-      itemBuilder: (context, index) => buildTask(tasks[index]), //Skapar en loop
-      itemCount: tasks.length //värdet som används för att stoppa loopen
-      
-      );
+    return ListView.builder(
+        itemBuilder: (context, index) =>
+            buildTask(tasks[index]), //Skapar en loop
+        itemCount: tasks.length //värdet som används för att stoppa loopen
+
+        );
   }
 
   //Widget som buildBody använder sig av för att skapa varje "ListTile-objekt" i listan
@@ -101,14 +106,7 @@ class _HomePageState extends State<HomePage> {
               task.done = done;
             });
           }),
-          
-      title: Text(task.title)
-          
-      /*setState((){
-        if (done=true){
-         style: TextStyle(decoration: TextDecoration.lineThrough),
-      }
-      })*/,
+      title: Text(task.title),
       trailing: IconButton(
         icon: Icon(Icons.close),
         onPressed: () {
@@ -120,30 +118,30 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
   //Metod för att ta bort en task, används i buildTask när statet ändras
-  void removeTask(Todo task){
+  void removeTask(Todo task) {
     tasks.remove(task);
   }
 
   //Metod som kallas av build och som tar fram addTask-sidan
-  //if-statementet avgör om man från addTask-sidan tar sig tillbaka genom pilen 
+  //if-statementet avgör om man från addTask-sidan tar sig tillbaka genom pilen
   //eller add-knappen som då skickar med en ny task
   void navigateAddTask() {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       return AddTask();
-    }
-    )).then((title){
-      if(title != null){
+    })).then((title) {
+      if (title != null) {
         addTodo(Todo(title: title));
-        print("!null");       
-      }else{
+        print("!null");
+      } else {
         print("null");
       }
     });
   }
 
   //Metod som används av navigateAddTask för att lägga till en ny task
-  void addTodo(Todo task){
+  void addTodo(Todo task) {
     tasks.add(task);
   }
 
@@ -163,12 +161,12 @@ class _HomePageState extends State<HomePage> {
 class Todo {
   String title; //namnet på task
   bool done; //status på checkbox
-  
 
   Todo({
-      this.title,
-      this.done = false, //sätter till false för att checkbox inte ska vara ibockad
-      });
+    this.title,
+    this.done =
+        false, //sätter till false för att checkbox inte ska vara ibockad
+  });
 }
 
 //Klass som deklarerar alternativen till menyn samt skapar en lista av dem.

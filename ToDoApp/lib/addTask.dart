@@ -8,7 +8,7 @@ class AddTask extends StatefulWidget {
 
 class _AddTask extends State<AddTask> {
   TextEditingController checkForInput = TextEditingController();
-  
+
   //Samma appBar som i huvudsidan
   //Bygger upp sidan med textfält och knappen m.h.a. andra widgets
   @override
@@ -22,10 +22,7 @@ class _AddTask extends State<AddTask> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _taskInputField(),
-            _addButton()
-          ],
+          children: [_taskInputField(), _addButton()],
         ),
       ),
     );
@@ -36,10 +33,10 @@ class _AddTask extends State<AddTask> {
     return Container(
       margin: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
       child: TextField(
-          decoration: InputDecoration(hintText: "What are you going to do?"),
-          controller: checkForInput,
-          //onSubmitted: (String value),
-          ),
+        decoration: InputDecoration(hintText: "What are you going to do?"),
+        controller: checkForInput,
+        //onSubmitted: (String value),
+      ),
     );
   }
 
@@ -47,18 +44,17 @@ class _AddTask extends State<AddTask> {
   Widget _addButton() {
     return Container(
       child: RaisedButton(
-          onPressed: () {              
+          onPressed: () {
             add();
             print("add");
           },
-          child: Text('+ADD')),         
+          child: Text('+ADD')),
     );
   }
 
   //Metod för att skapa funktionaliteten för "add-knappen"
   //Och för att ta sig tillbaka till huvudsidan
-  void add(){
+  void add() {
     Navigator.of(context).pop(checkForInput.text);
   }
-
 }
