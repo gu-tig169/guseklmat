@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
+import 'model.dart';
 
 //addTask-sidna ska vara stateful
 class AddTask extends StatefulWidget {
-  _AddTask createState() => _AddTask();
+  final Todo task;
+  AddTask(this.task);
+
+  _AddTask createState() => _AddTask(); //(task)
 }
 
 class _AddTask extends State<AddTask> {
   TextEditingController checkForInput = TextEditingController();
+  String text;
+
+  _AddTask() {
+    checkForInput.addListener(() {
+      setState(() {
+        text = checkForInput.text;
+      });
+    });
+  }
 
   //Samma appBar som i huvudsidan
   //Bygger upp sidan med textfält och knappen m.h.a. andra widgets
@@ -22,7 +34,7 @@ class _AddTask extends State<AddTask> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [_taskInputField(), _addButton()],
+          children: [_taskInputField(), _addButton(context)],
         ),
       ),
     );
@@ -32,29 +44,26 @@ class _AddTask extends State<AddTask> {
   Widget _taskInputField() {
     return Container(
       margin: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
-      child: TextField(
-        decoration: InputDecoration(hintText: "What are you going to do?"),
+      child: TextFormField(
         controller: checkForInput,
-        //onSubmitted: (String value),
+        decoration: InputDecoration(hintText: "What are you going to do?"),
       ),
     );
   }
 
 //Widget för add-knappen
-  Widget _addButton() {
+  Widget _addButton(context) {
     return Container(
       child: RaisedButton(
           onPressed: () {
-            add();
-            print("add");
+            if (text == null) {
+              //om textfältet är null händer inget när man klickar add
+              print("Nullish");
+            } else {
+              Navigator.pop(context, Todo(text: text));
+            }
           },
           child: Text('+ADD')),
     );
-  }
-
-  //Metod för att skapa funktionaliteten för "add-knappen"
-  //Och för att ta sig tillbaka till huvudsidan
-  void add() {
-    Navigator.of(context).pop(checkForInput.text);
   }
 }
