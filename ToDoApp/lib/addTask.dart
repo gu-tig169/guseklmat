@@ -58,7 +58,7 @@ class _AddTask extends State<AddTask> {
           onPressed: () {
             if (text == null) {
               //om textfältet är null händer inget när man klickar add
-              print("Nullish");
+              print("Du försökte lägga till en tom textsträng");
             } else {
               Navigator.pop(context, Todo(text: text));
             }

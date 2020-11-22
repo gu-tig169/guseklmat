@@ -1,8 +1,4 @@
 /*
- - Kunna stryka över en task när checkbox klickas i
- - Se till att första-sidan uppdateras när man lägger till en till task från addTask
- - Skapa funktionalitet till filterlistan
- 
  Funktionalitet:
  - Det går att klicka i en checkbox och genomstryka tasks
  - Det går att ta bort en task genom att klicka på krysset
@@ -10,10 +6,7 @@
  - Det går att skriva i textfältet och klicka på add
     - Har man fyllt i något så läggs det till och man skickas tillbaka till listan
     - Har man inte fyllt i något så händer ingenting
- - Menyn för filtrering finns, men funktionaliteten strular
-  - Har inte gjort så att listan automatiskt uppdateras när man klickar ett alternativ
-  - Tror det strular med variabeln filterValue. Kanske bör byta till "bool done" istället
-  
+ - Menyn för filtrering finns och funkar nu
 */
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +33,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//Första-sidan som är stateful för att kunna ändra state under körning
+//Första-sidan som jag har ändrat till stateless och använder istället provider
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -80,17 +73,18 @@ class HomePage extends StatelessWidget {
               leading: Checkbox(
                 value: state.getDone(index),
                 onChanged: (bool done) {
-                  Provider.of<MyState>(context, listen: false).setDone(
-                      index); 
+                  //done
+                  Provider.of<MyState>(context, listen: false)
+                      .setDone(index, done);
                 },
               ),
               title: Provider.of<MyState>(context, listen: false)
-                  .getTask(state, index), //state.getTask(state, index),
+                  .getTask(state, index), 
               trailing: IconButton(
                 icon: Icon(Icons.close),
                 onPressed: () {
                   Provider.of<MyState>(context, listen: false)
-                      .delete(index); //state.delete(index);
+                      .delete(index);
                 },
               ),
             );
@@ -103,6 +97,7 @@ class HomePage extends StatelessWidget {
         builder: (context, state, child) => PopupMenuButton(
               onSelected: (newValue) {
                 state.filterValue = newValue;
+                state.setFilter();
               },
               itemBuilder: (context) => [
                 PopupMenuItem(
