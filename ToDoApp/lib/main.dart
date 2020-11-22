@@ -43,17 +43,14 @@ class HomePage extends StatelessWidget {
           centerTitle: true,
           actions: [_popupButton()]),
       body: _buildBody(
-          context), //Kallar på widgeten buildBody för att skapa innehållet i body
+          //Kallar på widgeten buildBody för att skapa innehållet i body
+          context),
       floatingActionButton: FloatingActionButton(
           //skapar knapp för ta sig till addTask-sidan
           child: Icon(Icons.add),
           onPressed: () async {
-            var newTask = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AddTask(Todo(
-                          text: "What are you going to do?",
-                        ))));
+            var newTask = await Navigator.push(context,
+                MaterialPageRoute(builder: (context) => AddTask(Todo())));
             if (newTask != null) {
               Provider.of<MyState>(context, listen: false).addTask(newTask);
             }
@@ -63,28 +60,22 @@ class HomePage extends StatelessWidget {
 
   //Widget som bygger listan som visas i bodyn
   Widget _buildBody(BuildContext context) {
-    return Consumer<MyState> //stack overflow
-        (
+    return Consumer<MyState>(
       builder: (context, state, child) => ListView.builder(
           itemCount: state.getTasks.length,
           itemBuilder: (context, index) {
             return ListTile(
-              //child:
               leading: Checkbox(
                 value: state.getDone(index),
                 onChanged: (bool done) {
-                  //done
-                  Provider.of<MyState>(context, listen: false)
-                      .setDone(index, done);
+                  state.setDone(index, done);
                 },
               ),
-              title: Provider.of<MyState>(context, listen: false)
-                  .getTask(state, index), 
+              title: state.getTask(state, index),
               trailing: IconButton(
                 icon: Icon(Icons.close),
-                onPressed: () {
-                  Provider.of<MyState>(context, listen: false)
-                      .delete(index);
+                onPressed: () {//Provider.of<MyState>(context, listen: false).delete(index);
+                  state.delete(index);
                 },
               ),
             );
@@ -96,8 +87,8 @@ class HomePage extends StatelessWidget {
     return Consumer<MyState>(
         builder: (context, state, child) => PopupMenuButton(
               onSelected: (newValue) {
-                state.filterValue = newValue;
-                state.setFilter();
+                state.setFilterValue(newValue);
+                state.useFilter();
               },
               itemBuilder: (context) => [
                 PopupMenuItem(

@@ -17,28 +17,24 @@ class Todo {
 
 class MyState extends ChangeNotifier {
   //Variabel för filtrering
-  String filterValue = "All";
+  String _filterValue = "All";
 
   //Vanliga listan
   List<Todo> _tasks = new List();
 
-  //Metod för att skapa en ny filtrerad lista
-  List<Todo> filtering(List<Todo> _tasks, String filterValue) {
-    List<Todo> filteredTasks;
-    if (filterValue == "All") {
-      filteredTasks = _tasks;
-    } else if (filterValue == "Done") {
-      filteredTasks = _tasks.where((i) => i.done == true).toList();
-    } else if (filterValue =="Undone"){
-      filteredTasks = _tasks.where((i) => i.done == false).toList();
-    }
-    return filteredTasks;
-  }
+  //Filtrerade listan
+  List<Todo> _filteredTasks;
 
-  //Väldigt simpel metod som används i _popupButtom för kalla på metoden som filtrerar listan
-  setFilter() {
-    notifyListeners();
-    return filtering;
+  //Metod för att skapa en ny filtrerad lista
+  List<Todo> filtering(List<Todo> _tasks, String _filterValue) {
+    if (_filterValue == "All") {
+      _filteredTasks = _tasks;
+    } else if (_filterValue == "Done") {
+      _filteredTasks = _tasks.where((i) => i.done == true).toList();
+    } else if (_filterValue =="Undone"){
+      _filteredTasks = _tasks.where((i) => i.done == false).toList();
+    }
+    return _filteredTasks;
   }
 
   //Getter för listan _tasks, inkluderar testobjekt
@@ -59,7 +55,13 @@ class MyState extends ChangeNotifier {
       var task7 = new Todo(text: "task7", done: true);
       _tasks.add(task7);
     }
-    return filtering(_tasks, filterValue);
+    return filtering(_tasks, _filterValue);
+  }
+
+  //Väldigt simpel metod som används i _popupButtom för kalla på metoden som filtrerar listan
+  useFilter() {
+    notifyListeners();
+    return filtering;
   }
 
   //Metod för få namnet på en task, samt stryka över om done=true;
@@ -79,6 +81,7 @@ class MyState extends ChangeNotifier {
 
   //Metod för att lägga till task
   void addTask(Todo task) {
+    _filterValue = "All";
     getTasks.add(task);
     notifyListeners();
   }
@@ -90,8 +93,13 @@ class MyState extends ChangeNotifier {
     notifyListeners();
   }
 
-  //Metod för att ta bort task
-  void delete(index) {
+  //Metod för att sätta filterValue till valt värde i popupButton.
+  void setFilterValue(newValue) {
+    _filterValue = newValue;
+  }
+
+    //Metod för att ta bort task. Ändra och använda "remove" kanske?
+  void delete(index) {  
     getTasks.removeAt(index);
     notifyListeners();
   }
