@@ -1,5 +1,5 @@
 /* 
-Min lista:
+Min lista,
 https://todoapp-api-vldfm.ondigitalocean.app/todos?key=8d656188-4d49-475c-92f4-d6ffb2da5aa8
 Klassen för att kommunicera med API:t
 */

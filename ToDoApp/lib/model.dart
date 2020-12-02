@@ -1,3 +1,4 @@
+//Klass för Todo-objekt samt klass för MyState
 import 'package:flutter/material.dart';
 import 'apiTalker.dart';
 
@@ -17,17 +18,13 @@ class Todo {
   static Map<String, dynamic> toJson(Todo task) {
     return {
       'title': task.title,
-      'done': task.done, 
+      'done': task.done,
     };
   }
 
   //Konvertering från json
   static Todo fromJson(Map<String, dynamic> json) {
-    return Todo(
-        id: json['id'],
-        title: json['title'],
-        done: json['done'] 
-        );
+    return Todo(id: json['id'], title: json['title'], done: json['done']);
   }
 
   //Anävnds för att ändra värdet på done
@@ -37,6 +34,14 @@ class Todo {
 }
 
 class MyState extends ChangeNotifier {
+  //Färg för bakgrund
+  final Color _mainColor = Colors.blueGrey[50];
+
+  //Färg för appbar och knappar
+  final Color _secondColor = Colors.grey[400];
+
+  //Färg för text och symboler
+  final Color _thirdColor = Colors.black87;
 
   //Variabel för att ta emot sträng i texftfield
   String _inputText = "";
@@ -49,18 +54,6 @@ class MyState extends ChangeNotifier {
 
   //Filtrerade listan
   List<Todo> _filteredTasks;
-
-  //Metod för att skapa en ny filtrerad lista
-  List<Todo> filtering(List<Todo> _tasks, String _filterValue) {
-    if (_filterValue == "All") {
-      _filteredTasks = _tasks;
-    } else if (_filterValue == "Done") {
-      _filteredTasks = _tasks.where((i) => i.done == true).toList();
-    } else if (_filterValue == "Undone") {
-      _filteredTasks = _tasks.where((i) => i.done == false).toList();
-    }
-    return _filteredTasks;
-  }
 
   //Metod för att hämta API-listan
   Future fetchList() async {
@@ -82,7 +75,8 @@ class MyState extends ChangeNotifier {
 
   //Metod för att ta bort en task
   void delete(index) async {
-    print("Deleting " + getTasks[index].title + " at index: " + index.toString());
+    print(
+        "Deleting " + getTasks[index].title + " at index: " + index.toString());
     var tmp = getTasks[index].title;
     await APITalker.deleteTask(getTasks[index].id);
     print("Deleting of " + tmp + " is done.");
@@ -96,6 +90,18 @@ class MyState extends ChangeNotifier {
     await APITalker.updateDone(getTasks[index], getTasks[index].id);
     print("Finished updating " + getTasks[index].title + " status.");
     await fetchList();
+  }
+
+  //Metod för att skapa en ny filtrerad lista
+  List<Todo> filtering(List<Todo> _tasks, String _filterValue) {
+    if (_filterValue == "All") {
+      _filteredTasks = _tasks;
+    } else if (_filterValue == "Done") {
+      _filteredTasks = _tasks.where((i) => i.done == true).toList();
+    } else if (_filterValue == "Undone") {
+      _filteredTasks = _tasks.where((i) => i.done == false).toList();
+    }
+    return _filteredTasks;
   }
 
   //Metod för att sätta filterValue till valt värde i popupButton.
@@ -126,14 +132,18 @@ class MyState extends ChangeNotifier {
     if (getTasks[index].done == false) {
       return Text(getTasks[index].title,
           style: TextStyle(
-            fontSize: 20,
+            color: _thirdColor,
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
           ));
     } else {
       return Text(getTasks[index].title,
           style: TextStyle(
-              fontSize: 20,
+              color: _secondColor,
+              fontSize: 22,
               decoration: TextDecoration.lineThrough,
-              decorationThickness: 2.5));
+              decorationThickness: 2.0,
+              decorationColor: _thirdColor));
     }
   }
 
@@ -145,4 +155,11 @@ class MyState extends ChangeNotifier {
     notifyListeners();
     return filtering;
   }
+
+  //Getters för färgerna
+  getMainColor() => _mainColor;
+
+  getSecondColor() => _secondColor;
+
+  getThirdColor() => _thirdColor;
 }

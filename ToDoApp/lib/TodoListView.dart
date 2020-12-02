@@ -1,3 +1,4 @@
+//klass för listan som visas på förstasidan
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,9 +9,11 @@ class TodoListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppbar(),
+      appBar: customAppbar(context),
       body: _buildBody(context),
       floatingActionButton: _addButton(context),
+      backgroundColor:
+          Provider.of<MyState>(context, listen: false).getMainColor(),
     );
   }
 
@@ -22,13 +25,15 @@ class TodoListView extends StatelessWidget {
           itemBuilder: (context, index) {
             return Container(
               decoration: BoxDecoration(
-                border: Border(bottom: BorderSide()),
-              ),
+                  color: (index % 2 == 0
+                      ? Colors.grey[50]
+                      : state.getMainColor())),
               child: ListTile(
                 leading: Theme(
-                    data: ThemeData(unselectedWidgetColor: Colors.black),
+                    data:
+                        ThemeData(unselectedWidgetColor: state.getThirdColor()),
                     child: Checkbox(
-                        activeColor: Colors.black,
+                        activeColor: state.getSecondColor(),
                         checkColor: Colors.white,
                         value: state.getDone(index),
                         onChanged: (bool done) {
@@ -36,7 +41,8 @@ class TodoListView extends StatelessWidget {
                         })),
                 title: state.getTask(index),
                 trailing: IconButton(
-                  icon: Icon(Icons.close, color: Colors.black),
+                  icon:
+                      Icon(Icons.close, color: state.getThirdColor(), size: 30),
                   onPressed: () {
                     state.delete(index);
                   },
@@ -47,18 +53,25 @@ class TodoListView extends StatelessWidget {
     );
   }
 
-  Widget customAppbar() {
+  //Appbaren för "TodoListView"
+  Widget customAppbar(context) {
     return (AppBar(
-      title: Text("TIG169 TODO", style: TextStyle(color: Colors.black)),
-      backgroundColor: Colors.grey,
+      title: Text("TIG169 TODO",
+          style: TextStyle(
+            color: Provider.of<MyState>(context, listen: false).getThirdColor(),
+          )),
+      backgroundColor:
+          Provider.of<MyState>(context, listen: false).getSecondColor(),
       centerTitle: true,
       actions: [_popupButton()],
     ));
   }
 
+  //Knappen för att gå till "add-Task-sidan"
   Widget _addButton(context) {
     return (FloatingActionButton(
-        backgroundColor: Colors.grey,
+        backgroundColor:
+            Provider.of<MyState>(context, listen: false).getSecondColor(),
         child: Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           var newTask = await Navigator.push(context,
@@ -69,10 +82,11 @@ class TodoListView extends StatelessWidget {
         }));
   }
 
+  //Menyn i appbaren
   Widget _popupButton() {
     return Consumer<MyState>(
         builder: (context, state, child) => PopupMenuButton(
-              child: Icon(Icons.more_vert, color: Colors.black),
+              child: Icon(Icons.more_vert, color: state.getThirdColor()),
               onSelected: (newValue) {
                 state.setFilterValue(newValue);
                 state.useFilter();
