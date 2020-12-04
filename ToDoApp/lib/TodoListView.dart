@@ -1,4 +1,4 @@
-//klass för listan som visas på förstasidan
+//klass för listan som visas på förstasidan.
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +17,7 @@ class TodoListView extends StatelessWidget {
     );
   }
 
-  //Widget som bygger listan som visas i bodyn
+  //Widget som bygger listan som visas i bodyn.
   Widget _buildBody(BuildContext context) {
     return Consumer<MyState>(
       builder: (context, state, child) => ListView.builder(
@@ -53,7 +53,7 @@ class TodoListView extends StatelessWidget {
     );
   }
 
-  //Appbaren för "TodoListView"
+  //Appbaren för "TodoListView".
   Widget customAppbar(context) {
     return (AppBar(
       title: Text("TIG169 TODO",
@@ -67,7 +67,7 @@ class TodoListView extends StatelessWidget {
     ));
   }
 
-  //Knappen för att gå till "add-Task-sidan"
+  //Knappen för att gå till "add-Task-sidan".
   Widget _addButton(context) {
     return (FloatingActionButton(
         backgroundColor:
@@ -82,7 +82,7 @@ class TodoListView extends StatelessWidget {
         }));
   }
 
-  //Menyn i appbaren
+  //Menyn i appbaren.
   Widget _popupButton() {
     return Consumer<MyState>(
         builder: (context, state, child) => PopupMenuButton(

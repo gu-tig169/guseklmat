@@ -1,16 +1,17 @@
-//Klass för sidan att lägga till objekt i listan
+//Klass för sidan att lägga till objekt i listan.
 import 'package:flutter/material.dart';
-import 'model.dart';
 import 'package:provider/provider.dart';
 
-//addTask-sidan är ändrad till Stateless och jag använder provider istället
+import 'model.dart';
+
+//addTask-sidan är ändrad till Stateless och jag använder provider istället.
 class AddTask extends StatelessWidget {
   final Todo task;
   AddTask(this.task);
 
   final TextEditingController checkForInput = TextEditingController();
 
-  //Bygger upp sidan med textfält och knappen m.h.a. andra widgets
+  //Bygger upp sidan med textfält och knappen m.h.a. andra widgets.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +28,7 @@ class AddTask extends StatelessWidget {
     );
   }
 
-  //Appbaren för sidan "addTask"
+  //Appbaren för sidan "addTask".
   Widget _addTaskCustomAppbar(context) {
     return (AppBar(
       leading: IconButton(
@@ -46,7 +47,7 @@ class AddTask extends StatelessWidget {
     ));
   }
 
-  //Widget för att skapa textfältet
+  //Widget för att skapa textfältet.
   Widget _taskInputField(context) {
     return Container(
       margin: EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 30),
@@ -79,7 +80,7 @@ class AddTask extends StatelessWidget {
     );
   }
 
-//Widget för add-knappen
+//Widget för add-knappen.
   Widget _addButton(context) {
     return Consumer<MyState>(
       builder: (context, state, child) => RaisedButton(
@@ -87,7 +88,6 @@ class AddTask extends StatelessWidget {
         onPressed: () {
           state.inputText = checkForInput.text;
           if (state.getInputText() == "") {
-            //om textfältet är tomt händer inget när man klickar add
             print("Du försökte lägga till en tom textsträng");
           } else {
             Navigator.pop(context, Todo(title: state.getInputText()));
